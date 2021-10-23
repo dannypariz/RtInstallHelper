@@ -53,4 +53,4 @@ shared:
         driver: org.postgresql.Driver
         url: "jdbc:postgresql://compute215.jfrog.tech:10433/artifactory"
         username: artifactory
-        password: 827720.aesgcm256.L9IFcS3Q_UUn4CnX8Hb4ZDVpmFZH4Tf54x_Rf-L_rQxJ6Ts7Im5yCss
+        password: x_x_x_x
