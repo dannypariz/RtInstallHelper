@@ -1,0 +1,39 @@
+<config version="4">
+    <chain>
+        <provider id="cache-fs" type="cache-fs">                   <!-- This is a cached filestore -->
+            <provider id="sharding" type="sharding">                   <!-- This is a sharding provider -->
+                <sub-provider id="shard1" type="state-aware"/>     <!-- There are three mounts -->
+                <sub-provider id="shard2" type="state-aware"/>
+                <provider id="eventual" type="eventual">
+                    <provider id="retry" type="retry">
+                        <provider id="shard3" type="google-storage"/>
+                    </provider>
+                </provider>
+            </provider>            
+        </provider>
+    </chain>
+  
+ // Specify the read and write strategy and redundancy for the sharding binary provider
+   <provider id="sharding" type="sharding">
+        <readBehavior>roundRobin</readBehavior>                     
+        <writeBehavior>percentageFreeSpace</writeBehavior>
+        <redundancy>2</redundancy>
+  </provider>
+  
+  
+ //For each sub-provider (mount), specify the filestore location
+    <provider id="shard1" type="state-aware">
+	    <fileStoreDir>/opt/jfrog/artifactory/var/data/artifactory/filestore/compute212</fileStoreDir>
+    </provider>
+  
+    <provider id="shard2" type="state-aware">
+	    <fileStoreDir>/opt/jfrog/artifactory/var/data/artifactory/filestore/compute213</fileStoreDir>
+    </provider>
+  
+    <provider id="shard3" type="google-storage">
+        <endpoint>commondatastorage.googleapis.com</endpoint>
+         <bucketName>emea-friedrichvj-gcsbucket-214</bucketName> 
+        <identity>emea-friedrichvj-service-vm-sc@soleng-dev.iam.gserviceaccount.com</identity>
+        <credential>37e0d93dcbfac404ad98e2d00fbe51c0aec0bc2a</credential>
+     </provider>
+ </config>

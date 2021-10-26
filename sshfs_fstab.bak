@@ -1,0 +1,5 @@
+LABEL=cloudimg-rootfs	/	 ext4	defaults	0 1
+LABEL=UEFI	/boot/efi	vfat	umask=0077	0 1
+UUID=6d4298d9-acfd-47bb-ba32-50e319c4ef26 /var/opt ext4 defaults 0 2
+sshfs#root@compute212.jfrog.tech:/opt/jfrog/artifactory/var/data/artifactory/filestore/compute212 /opt/jfrog/artifactory/var/data/artifactory/filestore/compute212 fuse delay_connect,defaults,allow_other 0 2
+sshfs#root@compute213.jfrog.tech:/opt/jfrog/artifactory/var/data/artifactory/filestore/compute213 /opt/jfrog/artifactory/var/data/artifactory/filestore/compute213 fuse delay_connect,defaults,allow_other 0 2
