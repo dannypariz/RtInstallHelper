@@ -1,3 +1,5 @@
+apt-get update && apt-get install git -y
+git clone https://github.com/fjagwitz/RtInstallHelper
 
 ### POSTGRESQL DATABASE NODE PARTITIONING 
 mkdir /data
@@ -14,13 +16,15 @@ mount -a
 
 ### POSTGRESQL DATABASE INSTALLATION (UBUNTU 20.04 LTS FOCAL FOSSA GCP MINIMAL)
 ## install database and additional tools
-apt-get install postgresql rsync net-tools vim -y
+apt-get update && apt-get install git postgresql rsync net-tools vim -y
 ## stop database
 service postgresql stop
 ## copy database data to alternative path
 rsync -av /var/lib/postgresql /data
 ## backup postgresql.conf
 cp /etc/postgresql/12/main/postgresql.conf /etc/postgresql/12/main/postgresql.conf.bak
+## copy postgresql.conf template to application directory
+cp /root/RtInstallHelper/postgresql.conf /etc/postgresql/12/main/
 ## perform changes in postgresql.conf
 => CHANGE: data_directory = '/data/postgresql/12/main'
 => CHANGE: listen_addresses = '10.156.0.13, localhost'
@@ -39,8 +43,8 @@ rm -rf /var/lib/postgresql/12/main/
 # login with predefined user
 sudo -u postgres psql
 # set admin password
-ALTER USER postgres with encrypted password 'EmGuemH;Ps139';
-CREATE USER artifactory WITH PASSWORD 'EmGuemH;Ps139';
+ALTER USER postgres with encrypted password 'yyyyyy';
+CREATE USER artifactory WITH PASSWORD 'xxxxxx';
 CREATE DATABASE artifactory WITH OWNER=artifactory ENCODING='UTF8';
 GRANT ALL PRIVILEGES ON DATABASE artifactory TO artifactory;
 # validate user
@@ -60,7 +64,9 @@ mount -a
 
 ### ARTIFACTORY NODE PREPARATION
 ## install database connector and additional tools
-apt-get install libpostgresql-jdbc-java net-tools vim -y
+apt-get update && apt-get install git libpostgresql-jdbc-java net-tools vim -y
+## download artifactory installation helper
+git clone https://github.com/fjagwitz/RtInstallHelper
 ## add jfrog repositories
 wget -qO - https://releases.jfrog.io/artifactory/api/gpg/key/public | sudo apt-key add -;
 echo "deb https://releases.jfrog.io/artifactory/artifactory-pro-debs focal main" | sudo tee -a /etc/apt/sources.list;
@@ -78,15 +84,28 @@ ln -s /usr/share/java/libintl.jar /opt/jfrog/artifactory/var/bootstrap/artifacto
 
 ## backup system.yaml
 cp /opt/jfrog/artifactory/var/etc/system.yaml /opt/jfrog/artifactory/var/etc/system.yaml.bak
+## 1st Node copy system.yaml template from RtInstallHelper
+cp /root/RtInstallHelper/system.yaml /opt/jfrog/artifactory/var/etc/
+# 2nd Node
+scp compute222.jfrog.tech:/opt/jfrog/artifactory/var/etc/system.yaml /opt/jfrog/artifactory/var/etc/system.yaml
+# 3rd Node & following
+scp compute223.jfrog.tech:/opt/jfrog/artifactory/var/etc/system.yaml /opt/jfrog/artifactory/var/etc/system.yaml
+mkdir /opt/jfrog/artifactory/var/etc/security
+# 2nd Node
+scp compute222.jfrog.tech:/opt/jfrog/artifactory/var/etc/security/join.key /opt/jfrog/artifactory/var/etc/security/join.key
+# 3rd Node & following
+scp compute223.jfrog.tech:/opt/jfrog/artifactory/var/etc/security/join.key /opt/jfrog/artifactory/var/etc/security/join.key
+chown -R artifactory:artifactory /opt/jfrog/artifactory/var/etc/security
 ## set up system.yaml
 # https://www.jfrog.com/confluence/display/JFROG/Artifactory+System+YAML
 vim /opt/jfrog/artifactory/var/etc/system.yaml
 # shared
-javaHome: "/opt/jfrog/artifactory/app/third-party/java/"
+javaHome: "/opt/jfrog/artifactory/app/third-party/java"
 extraJavaOpts: "-Xms512m -Xmx2g"
-# security
-joinKey: "<FROM RT WEBUI>"
-masterKeyFile: "/opt/jfrog/artifactory/var/etc/security/master.key"
+# security => only on the first Node in the cluster
+joinKey: "<FROM RT WEBUI>" 
+# security => on all additional Nodes in the cluster
+joinKeyFile: "/opt/jfrog/artifactory/var/etc/security/join.key"
 # node
 # primary: true => Setting is deprecated
 haEnabled: true
@@ -100,13 +119,14 @@ password: <primary node: cleartext, additional nodes copy encrypted password fro
 => master.key is automatically generated on primary node, must be manually transferred to additional cluster members
 
 ### NGINX NODE CONFIGURATION
-apt-get install nginx -y
+apt-get update && apt-get install vim nginx -y
 
 ## ADAPT STANDARD CONFIG
-# uncomment the include statement in /etc/nginx/nginx.conf
-=> CHANGE: uncomment include /etc/nginx/sites-enabled/*;
+cd /etc/nginx/nginx.conf
+=> CHANGE: comment or delete the following line: include /etc/nginx/sites-enabled/*;
 # save artifactory.conf in /etc/nginx/conf.d
 => CHANGE: artifactory.conf is automatically created in WebUI
 
-
+### CONFIGURE GCS STORAGE FOR ARTIFACTORY
+cd /opt/jfrog/artifactory/var/etc/artifactory
 
