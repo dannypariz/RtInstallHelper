@@ -92,7 +92,7 @@ Now that you configured the database service, you need to configure who has acce
 #### validate user
     psql -U artifactory -h <myIpAddress> -p 10433 artifactory
 
-## FINISH THE DATABASE INSTALLATION
+#### FINISH THE DATABASE INSTALLATION
 Once this test was successfully performed, the database installation is successfully finished. Go ahead and install the artifactory nodes. 
 
 
@@ -179,7 +179,7 @@ On the next cluster node(s):
     echo "<myMasterKey>" > /opt/jfrog/artifactory/var/etc/security/master.key
     chown -R artifactory:artifactory /opt/jfrog/artifactory/var/etc/security
 
-## FINISH THE ARTIFACTORY INSTALLATION
+#### FINISH THE ARTIFACTORY INSTALLATION
 You may want to verify your cluster nodes are up and running in the Web UI under =>Monitoring=>Service Status. Some logs have proven to be extremely helpful: 
     - /opt/jfrog/artifactory/var/log/tomcat/tomcat-catalina*.log
     - /opt/jfrog/artifactory/var/log/artifactory-service.log
@@ -198,5 +198,5 @@ Once all nodes are up and running, the artifactory installation is done. Go ahea
 ### configure nginx to serve the cluster nodes
     => CHANGE: artifactory.conf is automatically created in WebUI, it can be downloaded and must be copied to /etc/nginx/conf.d/
 
-## FINISH THE NGINX INSTALLATION
+#### FINISH THE NGINX INSTALLATION
 Now you are done. 
