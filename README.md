@@ -24,12 +24,12 @@ For the ease of use, all commands are performed as root ("sudo -i").
 To avoid your database server to stop due to a full disk, you may want to add another (bunch of) virtual disks. The flexibility of LVM2 allows you to start with a small one while having the possibility to provision additional storage at a later point in time without any service interruptions. 
 You may decide to create a folder "/data" (or whatever you consider a good path). Then: 
 
-1.) create a physical volume on each of your additional disks (e.g. "/dev/sdb",...): 
-2.) create a volume group (e.g. "data") and add your physical volume to it
-3.) create a logical volume (e.g. "storage") in the volume group data; assign all available diskspace to it
-4.) format the logical volume with an appropriate filesystem (e.g. "ext4")
-5.) determine the disk UUID and add it to the "/etc/fstab" file to ensure it will be mounted at boot time
-6.) mount the logical volume
+    1.) create a physical volume on each of your additional disks (e.g. "/dev/sdb",...): 
+    2.) create a volume group (e.g. "data") and add your physical volume to it
+    3.) create a logical volume (e.g. "storage") in the volume group data; assign all available diskspace to it
+    4.) format the logical volume with an appropriate filesystem (e.g. "ext4")
+    5.) determine the disk UUID and add it to the "/etc/fstab" file to ensure it will be mounted at boot time
+    6.) mount the logical volume
 
 Commands that may help you to achieve this:     
 
@@ -53,7 +53,7 @@ Commands that may help you to achieve this:
 ### determine ip address of your database server
 The IP address will be required to define on what network interfaces the database will provide services; you can use a wildcard or be more specific configuring your ip address and - important - localhost. Start determining your ip address: 
 
-<myIpAddress>: ip a | grep inet | grep scope | grep global | awk '{ print $4 }'
+    <myIpAddress>: ip a | grep inet | grep scope | grep global | awk '{ print $4 }'
 
 ### perform changes in postgresql.conf
 - documentation: https://www.jfrog.com/confluence/display/JFROG/PostgreSQL
@@ -134,7 +134,7 @@ apt-get update && apt-get install libpostgresql-jdbc-java net-tools vim -y
     cp /opt/jfrog/artifactory/var/etc/system.yaml /opt/jfrog/artifactory/var/etc/system.yaml.bak
 
 ### set up system.yaml
-documentation: https://www.jfrog.com/confluence/display/JFROG/Artifactory+System+YAML
+- documentation: https://www.jfrog.com/confluence/display/JFROG/Artifactory+System+YAML
 
 The first node needs neither a join key nor a master key. These keys are being created during the first start of the service. The join key is then available in the Artifactory Web UI under =>Security=>Settings; the join key is not visible unless you unlock it with your password. You will need the database password you created above. 
 
@@ -184,7 +184,7 @@ You may want to verify your cluster nodes are up and running in the Web UI under
     - /opt/jfrog/artifactory/var/log/tomcat/tomcat-catalina*.log
     - /opt/jfrog/artifactory/var/log/artifactory-service.log
 
- Once all nodes are up and running, the artifactory installation is done. Go ahead and install the nginx node. 
+Once all nodes are up and running, the artifactory installation is done. Go ahead and install the nginx node. 
 
     
 ## NGINX NODE CONFIGURATION
