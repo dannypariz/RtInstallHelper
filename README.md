@@ -98,7 +98,7 @@ Once this test was successfully performed, the database installation is successf
 
 ## INSTALL ARTIFACTORY CLUSTER NODES
 ### install database connector and additional tools
-apt-get update && apt-get install libpostgresql-jdbc-java net-tools vim -y
+    apt-get update && apt-get install libpostgresql-jdbc-java net-tools vim -y
 
 ### add jfrog repositories
     wget -qO - https://releases.jfrog.io/artifactory/api/gpg/key/public | sudo apt-key add -;
