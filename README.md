@@ -56,7 +56,7 @@ The IP address will be required to define on what network interfaces the databas
     <myIpAddress>: ip a | grep inet | grep scope | grep global | awk '{ print $4 }'
 
 ### perform changes in postgresql.conf
-- documentation: https://www.jfrog.com/confluence/display/JFROG/PostgreSQL
+::documentation::: https://www.jfrog.com/confluence/display/JFROG/PostgreSQL
 
 You will add the data_directory path according to your needs and configuration. In this example the data directory will reside on the LVM logcial volume configured above. You can chose whatever port you want (default is 5432). 
 
@@ -129,13 +129,13 @@ Once this test was successfully performed, the database installation is successf
     ln -s /usr/share/java/postgresql.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/postgresql-jdbc4.jar
     ln -s /usr/share/java/libintl.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/libintl.jar
 
-- documentation: https://www.jfrog.com/confluence/display/JFROG/PostgreSQL
+::documentation::: https://www.jfrog.com/confluence/display/JFROG/PostgreSQL
 
 ### backup system.yaml
     cp /opt/jfrog/artifactory/var/etc/system.yaml /opt/jfrog/artifactory/var/etc/system.yaml.bak
 
 ### set up system.yaml
-- documentation: https://www.jfrog.com/confluence/display/JFROG/Artifactory+System+YAML
+::documentation::: https://www.jfrog.com/confluence/display/JFROG/Artifactory+System+YAML
 
 The first node needs neither a join key nor a master key. These keys are being created during the first start of the service. The join key is then available in the Artifactory Web UI under =>Security=>Settings; the join key is not visible unless you unlock it with your password. You will need the database password you created above. 
 
@@ -151,7 +151,7 @@ in the "database" section:
     password: <myPassword>
 
 #### all other nodes in the cluster (first node must be up and running)
-- documentation: https://www.jfrog.com/confluence/display/JFROG/Managing+Keys#ManagingKeys-CreatingYourKeys
+::documentation::: https://www.jfrog.com/confluence/display/JFROG/Managing+Keys#ManagingKeys-CreatingYourKeys
 
     vim /opt/jfrog/artifactory/var/etc/system.yaml
 
@@ -167,7 +167,7 @@ in the "database" section:
     password: <myPassword>
 
 ### provide master key (MUST NOT BE DONE for the first node in the cluster but for all others)
-- documentation: https://www.jfrog.com/confluence/display/JFROG/Managing+Keys#ManagingKeys-CreatingYourKeys
+::documentation::: https://www.jfrog.com/confluence/display/JFROG/Managing+Keys#ManagingKeys-CreatingYourKeys
 
 You must pick the master key from the first cluster node. The master key resides in "/opt/jfrog/artifactory/var/etc/security/master.key". You then create the security folder and the master key on every node you are about to add: 
 
