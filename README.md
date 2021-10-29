@@ -122,13 +122,14 @@ Once this test was successfully performed, the database installation is successf
     mount -a
 
 ### configure jdbc connector for postgresql 
-- documentation: https://www.jfrog.com/confluence/display/JFROG/PostgreSQL
 
     ln -s /usr/share/java/postgresql.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/postgresql.jar
     ln -s /usr/share/java/postgresql.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/postgresql-42.2.10.jar
     ln -s /usr/share/java/postgresql.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/postgresql-jdbc3.jar
     ln -s /usr/share/java/postgresql.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/postgresql-jdbc4.jar
     ln -s /usr/share/java/libintl.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/libintl.jar
+
+- documentation: https://www.jfrog.com/confluence/display/JFROG/PostgreSQL
 
 ### backup system.yaml
     cp /opt/jfrog/artifactory/var/etc/system.yaml /opt/jfrog/artifactory/var/etc/system.yaml.bak
