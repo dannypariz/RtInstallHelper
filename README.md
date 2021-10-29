@@ -50,19 +50,30 @@ GRANT ALL PRIVILEGES ON DATABASE artifactory TO artifactory;
 # validate user
 psql -U artifactory -h 127.0.0.1 -p 10433 artifactory
 
-## ARTIFACTORY INSTANCES PARTITIONING
+
+### ARTIFACTORY NODE PREPARATION
+## ARTIFACTORY INSTANCES PARTITIONING (V1)
+mkdir /data
 pvcreate /dev/sdb
 vgcreate data /dev/sdb
 lvcreate -l 100%FREE -n storage data 
 mkfs.ext4 /dev/mapper/data-storage
-mount /dev/mapper/data-storage /data
 myUUID=$(blkid | grep data-storage | awk '{ print $2 }' | sed -r 's/["]+//g')
 myDefinition=" /var/opt ext4 defaults 0 2"
 myFstabConfig="$myUUID$myDefinition"
 echo $myFstabConfig >> /etc/fstab
 mount -a
-
-### ARTIFACTORY NODE PREPARATION
+## ARTIFACTORY INSTANCES PARTITIONING (V2)
+mkdir /data
+pvcreate /dev/sdb
+vgcreate data /dev/sdb
+lvcreate -l 100%FREE -n storage data 
+mkfs.ext4 /dev/mapper/data-storage
+myUUID=$(blkid | grep data-storage | awk '{ print $2 }' | sed -r 's/["]+//g')
+myDefinition=" /data ext4 defaults 0 2"
+myFstabConfig="$myUUID$myDefinition"
+echo $myFstabConfig >> /etc/fstab
+mount -a
 ## install database connector and additional tools
 apt-get update && apt-get install git libpostgresql-jdbc-java net-tools vim -y
 ## download artifactory installation helper
@@ -73,7 +84,6 @@ echo "deb https://releases.jfrog.io/artifactory/artifactory-pro-debs focal main"
 apt-get update
 ## install artifactory pro
 apt-get install jfrog-artifactory-pro -y
-
 ### ARTIFACTORY NODE CONFIGURATION
 ## configure jdbc connector for postgresql
 ln -s /usr/share/java/postgresql.jar /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/postgresql.jar
@@ -116,7 +126,7 @@ url: "jdbc:postgresql://fqdn:port/database"
 username: artifactory
 password: <primary node: cleartext, additional nodes copy encrypted password from primary node>
 # CAREFUL
-=> master.key is automatically generated on primary node, must be manually transferred to additional cluster members
+=> master.key is automatically generated on all nodes
 
 ### NGINX NODE CONFIGURATION
 apt-get update && apt-get install vim nginx -y
